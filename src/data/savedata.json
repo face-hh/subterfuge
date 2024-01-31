@@ -1,0 +1,29 @@
+{
+    "money": 0,
+    "features": [
+        {
+            "item": "Array",
+            "cost": 20,
+            "unlocked": false,
+            "regex": "(\\barray\\b|\\[\\s*(?!\\])|[^\\S\\n]\\]|\\[])"
+        },
+        {
+            "item": "Loop",
+            "cost": 20,
+            "unlocked": false,
+            "regex": "(for|while|each)"
+        },
+        {
+            "item": "Function",
+            "cost": 20,
+            "unlocked": false,
+            "regex": "(function|\\=\\>)"
+        },
+        {
+            "item": "MutableVar",
+            "cost": 20,
+            "unlocked": false,
+            "regex": "(let)"
+        }
+    ]
+}

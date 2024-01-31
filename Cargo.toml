@@ -1,0 +1,15 @@
+[package]
+name = "subterfuge"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+colored = "2.1.0"
+console_engine = "2.6.1"
+crossterm = "0.27.0"
+fancy-regex = "0.13.0"
+ratatui = { version = "0.25.0", features = ["all-widgets"] }
+serde = "1.0.196"
+serde_json = "1.0.112"
