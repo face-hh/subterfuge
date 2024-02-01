@@ -1,24 +1,14 @@
+pub mod structs;
 mod tui;
 
 use std::{env, process};
 
-use colored::Colorize;
+use crossterm::style::Stylize;
 use fancy_regex::Regex;
 use serde_json::{Result, Value};
 
-#[derive(Debug)]
-struct SaveFile {
-    money: i64,
-    features: Vec<Feature>,
-}
-
-#[derive(Debug)]
-struct Feature {
-    item: String,
-    cost: i64,
-    unlocked: bool,
-    regex: String,
-}
+use structs::Feature;
+use structs::SaveFile;
 
 fn read_save_data() -> SaveFile {
     let file_path = "src/data/savedata.json";
@@ -72,8 +62,16 @@ fn run_checks(save_file: SaveFile, file_path: &String) {
                 .find(|(_, line)| line.contains(snippet))
                 .unwrap();
 
-            let err1 = format!("|- {}. {}", (line_number + 1), line.replace(snippet, &snippet.red().to_string()).yellow()).white();
-            let err2 = format!("|___  Usage of \"{}\" is forbidden.", feature.item.red());
+            let err1 = format!(
+                "|- {}. {}",
+                (line_number + 1),
+                line.replace(snippet, &snippet.red().to_string()).yellow()
+            )
+            .white();
+            let err2 = format!(
+                "|___  Usage of \"{}\" is forbidden.",
+                feature.item.clone().red()
+            );
 
             errors.push(format!("{}\n{}", err1, err2));
         }
@@ -83,16 +81,28 @@ fn run_checks(save_file: SaveFile, file_path: &String) {
 }
 
 fn main() -> Result<()> {
-    let _ = tui::init();
-    
     let save_file = read_save_data();
 
     let args: Vec<String> = env::args().collect();
-    let file_path = args
-        .get(1)
-        .expect("Please specify the file name to use. (cargo run main.ts)");
+    let arg = args.get(1).unwrap_or_else(|| {
+        println!(
+            "{}",
+            format!(
+                "{}\n{}\n{}\n{}",
+                "| Please specify a second argument.".red(),
+                "|_ Example:".dark_grey(),
+                "|___ sbf main.ts".dark_grey(),
+                "|___ sbf shop".dark_grey()
+            )
+        );
+        process::exit(1);
+    });
 
-    run_checks(save_file, file_path);
+    let needs_to_run = tui::init(&arg, &save_file);
+
+    if needs_to_run {
+        run_checks(save_file, arg);
+    }
 
     Ok(())
 }

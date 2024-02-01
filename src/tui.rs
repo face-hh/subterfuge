@@ -1,106 +1,157 @@
-use crossterm::{
-    event::{self, KeyCode, KeyEventKind},
-    terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
-    ExecutableCommand,
+use std::collections::HashMap;
+
+use console_engine::{
+    events::Event,
+    forms::{Checkbox, Form, FormField, FormOptions, FormStyle, FormValue, Radio},
+    rect_style::BorderStyle,
+    screen, ConsoleEngine, KeyCode, KeyModifiers,
 };
-use std::io::{stdout, Result};
+use crossterm::{event::KeyEvent, style::Stylize};
 
-use ratatui::{prelude::*, widgets::*};
-
-fn create_span(content: &str, color: Color, modifier: Modifier) -> Span {
-    Span::styled(
-        content,
-        Style::new()
-            .fg(color)
-            .add_modifier(modifier),
-    )
-}
-
-fn create_text(spans: Vec<Span>) -> Text {
-    Text::from(vec![Line::from(spans)])
-}
+use crate::structs::Feature;
+use crate::structs::SaveFile;
 
 pub fn display_errors(errors: Vec<String>) {
-    if errors.len() == 0 { return };
+    println!(
+        "{}",
+        "𐂃  Hey there, seems like you're using locked features :)".cyan()
+    );
+    println!(
+        "{}",
+        "|********************************************************|".dark_grey()
+    );
+    println!(
+        "{}",
+        "|                       Error dump                       |".dark_grey()
+    );
+    println!(
+        "{}",
+        "|                                                        |".dark_grey()
+    );
 
     for error in errors.iter().rev() {
         println!("{}", error);
     }
+
+    println!(
+        "{}",
+        "|________________________________________________________|".dark_grey()
+    );
 }
 
-pub fn init() -> Result<()> {
-    stdout().execute(EnterAlternateScreen)?;
-    enable_raw_mode()?;
-    let mut terminal = Terminal::new(CrosstermBackend::new(stdout()))?;
-    terminal.clear()?;
+pub fn display_shop(mut engine: ConsoleEngine, save_file: &SaveFile) {
+    // Define a theme for the form
+    let theme = FormStyle {
+        border: Some(BorderStyle::new_light()),
+        ..Default::default()
+    };
 
-    loop {
-        terminal.draw(|frame| {
-            let areas = Layout::new(
-                Direction::Vertical,
-                [
-                    Constraint::Length(1),
-                    Constraint::Length(1),
-                    Constraint::Length(1),
-                    Constraint::Length(1),
-                    Constraint::Length(1),
-                    Constraint::Length(1),
-                    Constraint::Length(1),
-                    Constraint::Length(1),
-                    Constraint::Length(1),
-                    Constraint::Length(1),
-                    Constraint::Length(1),
-                    Constraint::Length(1),
-                    Constraint::Length(1),
-                    Constraint::Length(1),
-                    Constraint::Length(1),
-                    Constraint::Length(1),
-                    Constraint::Length(1),
-                    Constraint::Min(0),
-                ],
-            )
-            .split(frame.size());
+    // Create a new Form with two text inputs in it
+    let mut form = Form::new(
+        28,
+        6,
+        FormOptions {
+            style: theme,
+            ..Default::default()
+        },
+    );
 
-            let info = "Welcome! Use \":h\" for an introduction!";
-            let eyes = vec!["𓃑", "𐂃", "𓃐", "𓃍, "];
+    let mut check_choices = vec![];
+    let features = &save_file.features;
 
-            let current_eyes = eyes.get(1).unwrap();
-            let stars = "𓃐".repeat(info.len());
+    for feature in features {
+        if feature.unlocked {
+            continue;
+        }
 
-            let title = format!("{current_eyes}  Subterfuge");
+        check_choices.push(format!("{} - {}$", feature.item, feature.cost))
+    }
 
-            let comment_border = format!("|𓃍{stars}|");
-            let comment_text =format!("| {info}");
-            
-            let span1 = create_span("𓃍𓃐𓃐𓃐𓃐𓃍𓃐𓃐𓃐𓃐𓃐𓃍𓃐𓃐𓃐𓃏𓃐𓃐𓃐𓃐𓃍𓃐𓃐𓃐𓃐𓃐𓃍𓃐𓃐𓃐𓃏𓃍𓃐𓃐𓃐𓃐𓃍𓃐𓃐𓃐𓃐𓃐𓃍𓃐𓃐𓃐𓃏𓃐𓃐𓃐𓃐𓃍𓃐𓃐𓃐𓃐𓃐𓃍𓃐𓃐𓃐𓃏𓃍𓃐𓃐𓃐𓃐𓃍𓃐𓃐𓃐𓃐𓃐𓃍𓃐𓃐𓃐𓃏𓃐𓃐𓃐𓃐𓃍𓃐𓃐𓃐𓃐𓃐𓃍𓃐𓃐𓃐𓃏𓃍𓃐𓃐𓃐𓃐𓃍𓃐𓃐𓃐𓃐𓃐𓃍𓃐𓃐𓃐𓃏𓃐𓃐𓃐𓃐𓃍𓃐𓃐𓃐𓃐𓃐𓃍𓃐𓃐𓃐𓃏", Color::Indexed(196), Modifier::BOLD);
-            let span2 = create_span("𓃑   ", Color::Indexed(196), Modifier::BOLD);
-            let span3 = create_span(&title, Color::Indexed(210), Modifier::BOLD);
-            let span4 = create_span(&comment_border, Color::Indexed(8), Modifier::ITALIC);
-            let span5 = create_span(&comment_text, Color::Indexed(8), Modifier::ITALIC);
-            
-            let text1 = create_text(vec![span1.clone()]);
-            let text2 = create_text(vec![span2.clone(), span3.clone()]);
-            let text3 = create_text(vec![span2.clone(), span4.clone()]);
-            let text4 = create_text(vec![span2.clone(), span5.clone()]);
-            let newline = create_text(vec![span2.clone()]);
-            
-            let texts = vec![text1.clone(), text2, text3.clone(), text4, text3, newline.clone(), newline.clone(), newline.clone(), text1];
-            
-            for (i, text) in texts.iter().enumerate() {
-                frame.render_widget(Paragraph::new(text.clone()), areas[i]);
+    form.build_field::<Checkbox>(
+        "checkbox",
+        FormOptions {
+            style: theme,
+            label: Some("𐂃  Shop"),
+            custom: HashMap::from([(
+                String::from("choices"),
+                FormValue::List(check_choices.clone()),
+            )]),
+            ..Default::default()
+        },
+    );
+
+    form.set_active(true);
+
+    while !form.is_finished() {
+        // Poll next event
+        match engine.poll() {
+            // A frame has passed
+            Event::Frame => {
+                engine.clear_screen();
+                engine.print_screen(1, 1, form.draw((engine.frame_count % 8 > 3) as usize));
+                engine.draw();
             }
-            
-        })?;
-        if event::poll(std::time::Duration::from_millis(16))? {
-            if let event::Event::Key(key) = event::read()? {
-                if key.kind == KeyEventKind::Press && key.code == KeyCode::Char('q') {
-                    break;
-                }
+
+            // exit with Escape
+            Event::Key(KeyEvent {
+                code: KeyCode::Esc,
+                modifiers: _,
+                kind: _,
+                state: _,
+            }) => {
+                break;
             }
+            // exit with CTRL+C
+            Event::Key(KeyEvent {
+                code: KeyCode::Char('c'),
+                modifiers: KeyModifiers::CONTROL,
+                kind: _,
+                state: _,
+            }) => {
+                break;
+            }
+            // Let the form handle the unhandled events
+            event => form.handle_event(event),
         }
     }
 
-    stdout().execute(LeaveAlternateScreen)?;
-    disable_raw_mode()?;
-    Ok(())
+    // we don't need the engine anymore, dropping it will close the fullscreen mode and bring us back to our terminal
+    drop(engine);
+
+    if form.is_finished() {
+        // Get the output of each fields
+        println!("{:?}", form.get_validated_field_output("checkbox"));
+        if let Ok(FormValue::Vec(selection_list)) = form.get_validated_field_output("checkbox") {
+            println!("{:?}", selection_list);
+            if selection_list.is_empty() {
+                println!("You selected nothing!");
+            } else {
+                let selection = selection_list
+                    .iter()
+                    .map(|x| {
+                        if let FormValue::Index(id) = x {
+                            check_choices[*id].clone()
+                        } else {
+                            check_choices[0].clone()
+                        }
+                    })
+                    .collect::<Vec<String>>();
+
+                println!("{:?}", selection);
+            }
+        }
+    } else {
+        println!("See you later!");
+    }
+}
+
+pub fn init(arg: &String, save_file: &SaveFile) -> bool {
+    let mut engine = ConsoleEngine::init(30, 8, 10).unwrap();
+
+    if arg == "shop" {
+        display_shop(engine, save_file);
+        return false;
+    }
+
+    return true;
 }
