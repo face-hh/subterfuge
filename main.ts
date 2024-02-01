@@ -1,4 +1,22 @@
-/** Given a non-negative integer "n", calculate the "n-th" Fibonacci number. The Fibonacci sequence is a sequence in which each number is the sum of the two preceding ones. */
-function fibonacci(index, times) {
-  
+"".split('')
+
+
+function f(index, times, sequence) {
+    index < times &&
+        (sequence.push(sequence[index - 1] + sequence[index - 2]),
+        f(index + 1, times, sequence));
+}
+
+let ok = 3;
+
+function fibonacci(index, times){
+    const sequence = [0, 1];
+
+    f(index, times, sequence)
+
+    return sequence
+}
+
+for(;;) {
+
 }

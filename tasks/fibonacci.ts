@@ -1,12 +1,17 @@
 /**
  * @requires Array      This task requires arrays.
- * @requires MutableVar This task requires mutable variables (let).
 */
 
-const sequence = [0, 1];
-
-function fibonacci(index, times) {
+function f(index, times, sequence) {
     index < times &&
         (sequence.push(sequence[index - 1] + sequence[index - 2]),
-        fibonacci(index + 1));
+        f(index + 1, times, sequence));
+}
+
+function fibonacci(index, times){
+    const sequence = [0, 1];
+
+    f(index, times, sequence)
+
+    return sequence
 }

@@ -1,5 +1,5 @@
-pub mod structs;
 mod checker;
+pub mod structs;
 mod tui;
 
 use std::fs;
@@ -9,8 +9,8 @@ use crossterm::style::Stylize;
 use fancy_regex::Regex;
 use serde_json::{Result, Value};
 
-use structs::{Feature, Problem};
 use structs::SaveFile;
+use structs::{Feature, Problem};
 
 fn read_save_data() -> SaveFile {
     let file_path = "src/data/savedata.json";
@@ -47,8 +47,18 @@ fn read_save_data() -> SaveFile {
         .map(|value| {
             let name = value.get("name").unwrap().as_str().unwrap().to_string();
             let append = value.get("append").unwrap().as_str().unwrap().to_string();
-            let starting_code = value.get("starting_code").unwrap().as_str().unwrap().to_string();
-            let description = value.get("description").unwrap().as_str().unwrap().to_string();
+            let starting_code = value
+                .get("starting_code")
+                .unwrap()
+                .as_str()
+                .unwrap()
+                .to_string();
+            let description = value
+                .get("description")
+                .unwrap()
+                .as_str()
+                .unwrap()
+                .to_string();
             let money = value.get("money").unwrap().as_i64().unwrap();
             let index = value.get("index").unwrap().as_i64().unwrap();
 
@@ -58,11 +68,16 @@ fn read_save_data() -> SaveFile {
                 index,
                 append,
                 starting_code,
-                description
+                description,
             }
         })
         .collect();
-    SaveFile { features, money, problems, current_problem }
+    SaveFile {
+        features,
+        money,
+        problems,
+        current_problem,
+    }
 }
 
 fn run_checks(save_file: SaveFile, file_path: &String) {
@@ -70,7 +85,9 @@ fn run_checks(save_file: SaveFile, file_path: &String) {
     let mut errors: Vec<String> = Vec::new();
 
     for feature in save_file.features.iter() {
-        if feature.unlocked { continue }
+        if feature.unlocked {
+            continue;
+        }
 
         let re = Regex::new(&feature.regex).unwrap();
         let res = re
@@ -104,24 +121,38 @@ fn run_checks(save_file: SaveFile, file_path: &String) {
         }
     }
 
-    if errors.len() != 0 { return tui::display_errors(errors); }
+    if !errors.is_empty() {
+        return tui::display_errors(errors);
+    }
 
     // check for the code to run successfully
-    let problem = checker::index_to_problem(&save_file, save_file.current_problem);
-    let next_problem = checker::index_to_problem(&save_file, save_file.current_problem + 1);
+    let problem = checker::index_to_problem(&save_file, save_file.current_problem).unwrap();
 
-    println!("{}", format!("Running your code against Problem #{}: \"{}\"...", &problem.index, &problem.clone().name.cyan()));
+    println!(
+        "Running your code against Problem #{}: \"{}\"...",
+        &problem.index,
+        &problem.clone().name.cyan()
+    );
 
     let money = problem.money;
     let passed = checker::check(contents, &problem);
 
     if !passed {
-        return println!("{}", format!("{}", "𐂃  Your code did not pass... :/".red()))
+        return println!("{}", "𐂃  Your code did not pass... :/".red());
     }
 
     problem_passed(&problem);
-    move_file(next_problem, file_path);
-    println!("{}", format!("{} (+{}$)", "𐂃  You did it! Run \"sbf current\" to see your next challenge.".green(), money))
+
+    if let Some(next_problem) = checker::index_to_problem(&save_file, save_file.current_problem + 1)
+    {
+        move_file(next_problem, file_path)
+    }
+
+    println!(
+        "{} (+{}$)",
+        "𐂃  You did it! Run \"sbf current\" to see your next challenge.".green(),
+        money
+    )
 }
 
 fn buy_feature(feature: &Feature) {
@@ -174,7 +205,10 @@ fn problem_passed(problem: &Problem) {
 
 fn move_file(problem: Problem, file_path: &String) {
     let _ = fs::copy(file_path, ".history/".to_owned() + file_path);
-    let _ = fs::write(file_path, format!("/** {} */\n{}", problem.description, problem.starting_code));
+    let _ = fs::write(
+        file_path,
+        format!("/** {} */\n{}", problem.description, problem.starting_code),
+    );
 }
 
 fn main() -> Result<()> {
@@ -183,14 +217,11 @@ fn main() -> Result<()> {
     let args: Vec<String> = env::args().collect();
     let arg = args.get(1).unwrap_or_else(|| {
         println!(
-            "{}",
-            format!(
-                "{}\n{}\n{}\n{}",
-                "𐂃  Subterfuge\n".cyan(),
-                "Commands:",
-                "  - filepath (ex. main.ts)",
-                "  - shop",
-            )
+            "{}\n{}\n{}\n{}",
+            "𐂃  Subterfuge\n".cyan(),
+            "Commands:",
+            "  - filepath (ex. main.ts)",
+            "  - shop",
         );
         process::exit(1);
     });
@@ -199,6 +230,8 @@ fn main() -> Result<()> {
         let feature = tui::display_shop(&save_file);
 
         buy_feature(feature)
+    } else if arg == "current" {
+        tui::display_current_task(&save_file)
     } else {
         run_checks(save_file, arg);
     }

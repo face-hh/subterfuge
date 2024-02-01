@@ -1,5 +1,6 @@
 use crossterm::style::Stylize;
 
+use crate::checker::index_to_problem;
 use crate::structs::Feature;
 use crate::structs::SaveFile;
 
@@ -34,10 +35,47 @@ pub fn display_errors(errors: Vec<String>) {
     );
 }
 
+pub fn display_current_task(save_file: &SaveFile) {
+    let problem = index_to_problem(save_file, save_file.current_problem).unwrap();
+    println!(
+        "{}",
+        "|********************************************************|".dark_grey()
+    );
+    println!(
+        "{} {}",
+        "| Problem:".dark_grey(),
+        problem.name.cyan()
+    );
+    println!(
+        "{} {}",
+        "| Description:".dark_grey(),
+        problem.description.cyan()
+    );
+    println!(
+        "{} {}{}",
+        "| Bounty:".dark_grey(),
+        problem.money.to_string().cyan(),
+        "$".cyan()
+    );
+    println!(
+        "{} {}",
+        "| #:".dark_grey(),
+        problem.index.to_string().cyan(),
+    );
+    println!(
+        "{} {}",
+        "| Boilerplate:".dark_grey(),
+        problem.starting_code.replace("\n", "").cyan(), // it breaks things lol
+    );
+    println!(
+        "{}",
+        "|________________________________________________________|".dark_grey()
+    );
+}
 pub fn display_shop(save_file: &SaveFile) -> &Feature {
     let money = save_file.money.to_string() + "$";
 
-    println!("{}", format!("{} {}", "! Wallet:".dark_grey(), money.dark_green()));
+    println!("{} {}", "! Wallet:".dark_grey(), money.dark_green());
 
     let features = &save_file.features;
     let mut listed_features: Vec<&Feature> = vec![];
@@ -86,5 +124,5 @@ pub fn display_shop(save_file: &SaveFile) -> &Feature {
         process::exit(1)
     });
 
-    return feature
+    feature
 }

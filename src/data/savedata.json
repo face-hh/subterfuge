@@ -4,23 +4,23 @@
     {
       "cost": 20,
       "item": "Array",
-      "regex": "(\\barray\\b|\\[\\s*(?!\\])|[^\\S\\n]\\]|\\[])",
-      "unlocked": true
+      "regex": "(\\bArray\\b|\\[\\s*(?!\\])|[^\\S\\n]\\]|\\[]|\\.split)",
+      "unlocked": false
     },
     {
       "cost": 500,
       "item": "Loop",
-      "regex": "(for|while|each)",
+      "regex": "(for|while|each)\\s*\\(",
       "unlocked": false
     },
     {
       "cost": 200,
       "item": "MutableVar",
       "regex": "(let)",
-      "unlocked": true
+      "unlocked": false
     }
   ],
-  "money": 350,
+  "money": 210,
   "problems": [
     {
       "append": "",
@@ -31,7 +31,7 @@
       "starting_code": "console.log()"
     },
     {
-      "append": "for(let i = 0; i < 30; i++) { console.log(fibonacci(i, 10)) }",
+      "append": "for (let i = 0; i < 30; i++) { let res = fibonacci(2, i); if (i === 29) { console.log(__arraysEqual(res, [0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597, 2584, 4181, 6765, 10946, 17711, 28657, 46368, 75025, 121393, 196418, 317811]) ? '__PASS55__' : '' ); } }\n/** i know this is not efficient :d */",
       "description": "Given a non-negative integer \"n\", calculate the \"n-th\" Fibonacci number. The Fibonacci sequence is a sequence in which each number is the sum of the two preceding ones.",
       "index": 2,
       "money": 350,
