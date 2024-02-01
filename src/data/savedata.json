@@ -1,29 +1,42 @@
 {
-    "money": 0,
-    "features": [
-        {
-            "item": "Array",
-            "cost": 20,
-            "unlocked": false,
-            "regex": "(\\barray\\b|\\[\\s*(?!\\])|[^\\S\\n]\\]|\\[])"
-        },
-        {
-            "item": "Loop",
-            "cost": 20,
-            "unlocked": false,
-            "regex": "(for|while|each)"
-        },
-        {
-            "item": "Function",
-            "cost": 20,
-            "unlocked": false,
-            "regex": "(function|\\=\\>)"
-        },
-        {
-            "item": "MutableVar",
-            "cost": 20,
-            "unlocked": false,
-            "regex": "(let)"
-        }
-    ]
+  "current_problem": 2,
+  "features": [
+    {
+      "cost": 20,
+      "item": "Array",
+      "regex": "(\\barray\\b|\\[\\s*(?!\\])|[^\\S\\n]\\]|\\[])",
+      "unlocked": true
+    },
+    {
+      "cost": 500,
+      "item": "Loop",
+      "regex": "(for|while|each)",
+      "unlocked": false
+    },
+    {
+      "cost": 200,
+      "item": "MutableVar",
+      "regex": "(let)",
+      "unlocked": true
+    }
+  ],
+  "money": 350,
+  "problems": [
+    {
+      "append": "",
+      "description": "Print to the terminal the words \"Hello, World!\".",
+      "index": 1,
+      "money": 50,
+      "name": "Hello World",
+      "starting_code": "console.log()"
+    },
+    {
+      "append": "for(let i = 0; i < 30; i++) { console.log(fibonacci(i, 10)) }",
+      "description": "Given a non-negative integer \"n\", calculate the \"n-th\" Fibonacci number. The Fibonacci sequence is a sequence in which each number is the sum of the two preceding ones.",
+      "index": 2,
+      "money": 350,
+      "name": "Fibonacci",
+      "starting_code": "function fibonacci(index, times) {\n  \n}"
+    }
+  ]
 }

@@ -1,15 +1,10 @@
-use std::collections::HashMap;
-
-use console_engine::{
-    events::Event,
-    forms::{Checkbox, Form, FormField, FormOptions, FormStyle, FormValue, Radio},
-    rect_style::BorderStyle,
-    screen, ConsoleEngine, KeyCode, KeyModifiers,
-};
-use crossterm::{event::KeyEvent, style::Stylize};
+use crossterm::style::Stylize;
 
 use crate::structs::Feature;
 use crate::structs::SaveFile;
+
+use std::io::{stdin, stdout, Write};
+use std::process;
 
 pub fn display_errors(errors: Vec<String>) {
     println!(
@@ -39,119 +34,57 @@ pub fn display_errors(errors: Vec<String>) {
     );
 }
 
-pub fn display_shop(mut engine: ConsoleEngine, save_file: &SaveFile) {
-    // Define a theme for the form
-    let theme = FormStyle {
-        border: Some(BorderStyle::new_light()),
-        ..Default::default()
-    };
+pub fn display_shop(save_file: &SaveFile) -> &Feature {
+    let money = save_file.money.to_string() + "$";
 
-    // Create a new Form with two text inputs in it
-    let mut form = Form::new(
-        28,
-        6,
-        FormOptions {
-            style: theme,
-            ..Default::default()
-        },
-    );
+    println!("{}", format!("{} {}", "! Wallet:".dark_grey(), money.dark_green()));
 
-    let mut check_choices = vec![];
     let features = &save_file.features;
+    let mut listed_features: Vec<&Feature> = vec![];
 
+    let mut i = 0;
     for feature in features {
         if feature.unlocked {
             continue;
         }
+        i += 1;
+        let item = &feature.item;
+        let cost = feature.cost.to_string() + "$";
 
-        check_choices.push(format!("{} - {}$", feature.item, feature.cost))
+        // fuck you and your performance.clone().unwrap().unwrap().unwrap().unwrap().clone()
+        let info = format!(
+            "{}. {} - {}",
+            i.to_string().dark_grey(),
+            item.clone().cyan(),
+            if save_file.money >= feature.cost { cost.clone().green() } else { cost.clone().red() }
+        );
+
+        listed_features.push(feature);
+
+        println!("{info}");
     }
 
-    form.build_field::<Checkbox>(
-        "checkbox",
-        FormOptions {
-            style: theme,
-            label: Some("𐂃  Shop"),
-            custom: HashMap::from([(
-                String::from("choices"),
-                FormValue::List(check_choices.clone()),
-            )]),
-            ..Default::default()
-        },
-    );
-
-    form.set_active(true);
-
-    while !form.is_finished() {
-        // Poll next event
-        match engine.poll() {
-            // A frame has passed
-            Event::Frame => {
-                engine.clear_screen();
-                engine.print_screen(1, 1, form.draw((engine.frame_count % 8 > 3) as usize));
-                engine.draw();
-            }
-
-            // exit with Escape
-            Event::Key(KeyEvent {
-                code: KeyCode::Esc,
-                modifiers: _,
-                kind: _,
-                state: _,
-            }) => {
-                break;
-            }
-            // exit with CTRL+C
-            Event::Key(KeyEvent {
-                code: KeyCode::Char('c'),
-                modifiers: KeyModifiers::CONTROL,
-                kind: _,
-                state: _,
-            }) => {
-                break;
-            }
-            // Let the form handle the unhandled events
-            event => form.handle_event(event),
-        }
+    print!("I want to buy... > ");
+    let mut s = String::new();
+    let _ = stdout().flush();
+    stdin()
+        .read_line(&mut s)
+        .expect("Did not enter a correct string");
+    if let Some('\n') = s.chars().next_back() {
+        s.pop();
+    }
+    if let Some('\r') = s.chars().next_back() {
+        s.pop();
     }
 
-    // we don't need the engine anymore, dropping it will close the fullscreen mode and bring us back to our terminal
-    drop(engine);
+    let index: usize = s.parse().unwrap_or_else(|_| {
+        println!("Received input failed to be cast to usize.");
+        process::exit(1)
+    });
+    let feature = listed_features.get(index - 1).unwrap_or_else(|| {
+        println!("Received input exceeds array boundaries.");
+        process::exit(1)
+    });
 
-    if form.is_finished() {
-        // Get the output of each fields
-        println!("{:?}", form.get_validated_field_output("checkbox"));
-        if let Ok(FormValue::Vec(selection_list)) = form.get_validated_field_output("checkbox") {
-            println!("{:?}", selection_list);
-            if selection_list.is_empty() {
-                println!("You selected nothing!");
-            } else {
-                let selection = selection_list
-                    .iter()
-                    .map(|x| {
-                        if let FormValue::Index(id) = x {
-                            check_choices[*id].clone()
-                        } else {
-                            check_choices[0].clone()
-                        }
-                    })
-                    .collect::<Vec<String>>();
-
-                println!("{:?}", selection);
-            }
-        }
-    } else {
-        println!("See you later!");
-    }
-}
-
-pub fn init(arg: &String, save_file: &SaveFile) -> bool {
-    let mut engine = ConsoleEngine::init(30, 8, 10).unwrap();
-
-    if arg == "shop" {
-        display_shop(engine, save_file);
-        return false;
-    }
-
-    return true;
+    return feature
 }
