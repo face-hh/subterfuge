@@ -18,6 +18,18 @@ Commands:
   - use [code] (Claim a COUPON code. Example: claim OKEGAOP)
 ```
 
+# How to run?
+1. Install Rust: https://www.rust-lang.org/tools/install
+2. Run `cargo run` in this folder.
+3. Create a `main.ts` in this folder.
+4. You may now play the game, `cargo run main.ts`
+
+ALTERNATIVELY
+
+1. Run `cargo build --release`
+2. Copy the path (`target/release/subterfuge`)
+3. Add it to your PATH.
+
 # Monetisation
 What? Battle pass?? Ads?? Banner ads?????
 
