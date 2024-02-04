@@ -1,10 +1,224 @@
 {
-  "current_problem": 2,
+  "battlepass": [
+    {
+      "amount": 100,
+      "index": "1",
+      "p": false,
+      "type": "money"
+    },
+    {
+      "amount": 25,
+      "index": "2",
+      "p": false,
+      "type": "money"
+    },
+    {
+      "amount": 100,
+      "index": "3",
+      "p": true,
+      "type": "money"
+    },
+    {
+      "amount": 25,
+      "index": "4",
+      "p": false,
+      "type": "money"
+    },
+    {
+      "amount": 25,
+      "index": "5",
+      "p": false,
+      "type": "money"
+    },
+    {
+      "amount": 100,
+      "index": "6",
+      "p": true,
+      "type": "money"
+    },
+    {
+      "amount": 25,
+      "index": "7",
+      "p": false,
+      "type": "money"
+    },
+    {
+      "amount": 25,
+      "index": "8",
+      "p": false,
+      "type": "money"
+    },
+    {
+      "amount": 250,
+      "index": "9",
+      "p": true,
+      "type": "money"
+    },
+    {
+      "amount": 251,
+      "index": "10",
+      "p": true,
+      "type": "money"
+    },
+    {
+      "amount": 252,
+      "index": "11",
+      "p": true,
+      "type": "money"
+    },
+    {
+      "amount": 253,
+      "index": "12",
+      "p": true,
+      "type": "money"
+    },
+    {
+      "amount": 254,
+      "index": "13",
+      "p": true,
+      "type": "money"
+    },
+    {
+      "amount": 255,
+      "index": "14",
+      "p": true,
+      "type": "money"
+    },
+    {
+      "amount": 1,
+      "index": "15",
+      "p": false,
+      "type": "money"
+    },
+    {
+      "amount": 250,
+      "index": "16",
+      "p": true,
+      "type": "money"
+    },
+    {
+      "amount": 100,
+      "index": "17",
+      "p": false,
+      "type": "money"
+    },
+    {
+      "amount": 100,
+      "index": "18",
+      "p": true,
+      "type": "money"
+    },
+    {
+      "amount": 100,
+      "index": "19",
+      "p": false,
+      "type": "money"
+    },
+    {
+      "amount": 100,
+      "index": "20",
+      "p": true,
+      "type": "money"
+    },
+    {
+      "amount": 100,
+      "index": "21",
+      "p": false,
+      "type": "money"
+    },
+    {
+      "amount": 100,
+      "index": "22",
+      "p": true,
+      "type": "money"
+    },
+    {
+      "amount": 100,
+      "index": "23",
+      "p": false,
+      "type": "money"
+    },
+    {
+      "amount": 100,
+      "index": "24",
+      "p": true,
+      "type": "money"
+    },
+    {
+      "amount": 100,
+      "index": "25",
+      "p": false,
+      "type": "money"
+    },
+    {
+      "amount": 100,
+      "index": "26",
+      "p": true,
+      "type": "money"
+    },
+    {
+      "amount": 100,
+      "index": "27",
+      "p": false,
+      "type": "money"
+    },
+    {
+      "amount": 100,
+      "index": "28",
+      "p": true,
+      "type": "money"
+    },
+    {
+      "amount": 100,
+      "index": "29",
+      "p": false,
+      "type": "money"
+    },
+    {
+      "amount": 10000,
+      "index": "30",
+      "p": false,
+      "type": "money"
+    }
+  ],
+  "bp_tier": 12,
+  "bp_xp": 1732,
+  "current_problem": 5,
   "features": [
     {
       "cost": 20,
       "item": "Array",
       "regex": "(\\bArray\\b|\\[\\s*(?!\\])|[^\\S\\n]\\]|\\[]|\\.split)",
+      "unlocked": false
+    },
+    {
+      "cost": 75,
+      "item": "Clojures",
+      "regex": "(=>)",
+      "unlocked": false
+    },
+    {
+      "cost": 100,
+      "item": "Object",
+      "regex": "\\{(\\s*[\"']?\\w+[\"']?\\s*:\\s*\\w+\\s*,)*\\s*[\"']?\\w+[\"']?\\s*:\\s*\\w+\\s*\\}|Object",
+      "unlocked": false
+    },
+    {
+      "cost": 150,
+      "item": "IfStatement",
+      "regex": "(if)",
+      "unlocked": false
+    },
+    {
+      "cost": 200,
+      "item": "MutableVar",
+      "regex": "(let)",
+      "unlocked": false
+    },
+    {
+      "cost": 250,
+      "item": "ElseStatement",
+      "regex": "(else)",
       "unlocked": false
     },
     {
@@ -14,13 +228,26 @@
       "unlocked": false
     },
     {
-      "cost": 200,
-      "item": "MutableVar",
-      "regex": "(let)",
+      "cost": 500,
+      "item": "Ternaries",
+      "regex": "[^?]*\\s*\\?\\s*[^:]*\\s*:\\s*.*",
+      "unlocked": false
+    },
+    {
+      "cost": 750,
+      "item": "Types",
+      "regex": "(\b(?:\\([^)]+\\)|[^:\n]+)\\s*:\\s)",
+      "unlocked": false
+    },
+    {
+      "cost": 5000,
+      "item": "Packages",
+      "regex": "(import|require)",
       "unlocked": false
     }
   ],
-  "money": 210,
+  "money": 3496,
+  "premium": true,
   "problems": [
     {
       "append": "",
@@ -31,12 +258,44 @@
       "starting_code": "console.log()"
     },
     {
-      "append": "for (let i = 0; i < 30; i++) { let res = fibonacci(2, i); if (i === 29) { console.log(__arraysEqual(res, [0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597, 2584, 4181, 6765, 10946, 17711, 28657, 46368, 75025, 121393, 196418, 317811]) ? '__PASS55__' : '' ); } }\n/** i know this is not efficient :d */",
+      "append": "for (let i = 0; i < 30; i++) { let res = fibonacci(2, i); if (i === 29) { console.log(__arraysEqual(res, [0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597, 2584, 4181, 6765, 10946, 17711, 28657, 46368, 75025, 121393, 196418, 317811]) ? '__PASS55__' : '' ); } }",
       "description": "Given a non-negative integer \"n\", calculate the \"n-th\" Fibonacci number. The Fibonacci sequence is a sequence in which each number is the sum of the two preceding ones.",
       "index": 2,
-      "money": 350,
+      "money": 75,
       "name": "Fibonacci",
       "starting_code": "function fibonacci(index, times) {\n  \n}"
+    },
+    {
+      "append": "console.log(argumentsLength(1, 2, 3, 4) === 4 && argumentsLength('', null, undefined) === 3 && argumentsLength(() => {}, 333, 'abc', null, null, []) === 6 ? '__PASS55__' : '' );",
+      "description": "Given some arguments, return their count. Example: f({}, null, 2) -> 3",
+      "index": 3,
+      "money": 25,
+      "name": "Length of Arguments",
+      "starting_code": "function argumentsLength(...args) {\n  \n}"
+    },
+    {
+      "append": "console.log(isEmpty({}) === true && isEmpty({ 'ok': true }) === false && isEmpty({ null: null, undefined: undefined }) === false ? '__PASS55__' : '' );",
+      "description": "Given an object or an array, return if it is empty.",
+      "index": 4,
+      "money": 150,
+      "name": "Is Object Empty",
+      "starting_code": "function isEmpty(obj) {\n  \n}"
+    },
+    {
+      "append": "console.log(romanToInt('CMXCIX') === 999 && romanToInt('DCCCLXVI') === 866 && romanToInt('XLVI') === 46 && romanToInt('CCCLVII') === 357 ? '__PASS55__' : '' );",
+      "description": "Roman numerals are represented by seven different symbols: I (1), V (5), X (10), L (50), C (100), D (500) and M (1000). Given a roman numeral, convert it into an integer.",
+      "index": 5,
+      "money": 500,
+      "name": "Roman Numeral",
+      "starting_code": "function romanToInt(str) {\n  \n}"
+    },
+    {
+      "append": "console.log(__objectEqual(compactObject(null), null) && __objectEqual(compactObject({}), {}) && __objectEqual(compactObject({ ok: true }), { ok: true }) && __objectEqual(compactObject({ ok: false }), {}) && __objectEqual(compactObject({ ok: null }), {}) && __objectEqual(compactObject({ ok: 0}), {}) && __objectEqual(compactObject({ ok: 1 }), { ok: 1 }) && __objectEqual(compactObject([]), []) && __arraysEqual(compactObject([true, false]), [true]) ? '__PASS55__' : '' );",
+      "description": "Given an object or array obj, return a compact object. A compact object is the same as the original object, except with keys containing falsy values removed. This operation applies to the object and any nested objects. Arrays are considered objects where the indices are keys. A value is considered falsy when Boolean(value) returns false.",
+      "index": 6,
+      "money": 600,
+      "name": "Compact Object",
+      "starting_code": "function compactObject(obj) {\n  \n}"
     }
   ]
 }

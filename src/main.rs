@@ -7,9 +7,10 @@ use std::{env, process};
 
 use crossterm::style::Stylize;
 use fancy_regex::Regex;
+use rand::Rng;
 use serde_json::{Result, Value};
 
-use structs::SaveFile;
+use structs::{BattlepassTier, SaveFile};
 use structs::{Feature, Problem};
 
 fn read_save_data() -> SaveFile {
@@ -21,8 +22,13 @@ fn read_save_data() -> SaveFile {
 
     let features_raw = json.get("features").unwrap().as_array().unwrap();
     let money = json.get("money").unwrap().as_i64().unwrap();
+    let bp_xp = json.get("bp_xp").unwrap().as_i64().unwrap();
+    let bp_tier = json.get("bp_tier").unwrap().as_i64().unwrap();
+    let premium = json.get("premium").unwrap().as_bool().unwrap();
+
     let current_problem = json.get("current_problem").unwrap().as_i64().unwrap();
 
+    // the code you are about to read is very disgusting
     let features: Vec<Feature> = features_raw
         .iter()
         .map(|value| {
@@ -72,15 +78,44 @@ fn read_save_data() -> SaveFile {
             }
         })
         .collect();
+
+    let raw_battlepass = json.get("battlepass").unwrap().as_array().unwrap();
+
+    let battlepass: Vec<BattlepassTier> = raw_battlepass
+        .iter()
+        .map(|value| {
+            let _type = value.get("type").unwrap().as_str().unwrap().to_string();
+            let index = value.get("index").unwrap().as_str().unwrap().to_string();
+            let amount = value.get("amount").unwrap().as_i64().unwrap();
+            let p = value.get("p").unwrap().as_bool().unwrap();
+
+            BattlepassTier {
+                index,
+                _type,
+                amount,
+                p,
+            }
+        })
+        .collect();
     SaveFile {
         features,
         money,
         problems,
         current_problem,
+        battlepass,
+        bp_xp,
+        bp_tier,
+        premium,
     }
 }
 
 fn run_checks(save_file: SaveFile, file_path: &String) {
+    let wheel_chance = rand::thread_rng().gen_range(1..10);
+
+    if wheel_chance == 1 {
+        tui::display_spinning_wheel()
+    }
+
     let contents = std::fs::read_to_string(file_path).unwrap();
     let mut errors: Vec<String> = Vec::new();
 
@@ -141,7 +176,7 @@ fn run_checks(save_file: SaveFile, file_path: &String) {
         return println!("{}", "𐂃  Your code did not pass... :/".red());
     }
 
-    problem_passed(&problem);
+    problem_passed(&save_file, &problem);
 
     if let Some(next_problem) = checker::index_to_problem(&save_file, save_file.current_problem + 1)
     {
@@ -184,27 +219,57 @@ fn buy_feature(feature: &Feature) {
     fs::write(file_path, updated_json_string).unwrap();
 }
 
-fn problem_passed(problem: &Problem) {
+fn problem_passed(save_file: &SaveFile, problem: &Problem) {
     let file_path = "src/data/savedata.json";
     let json_string = std::fs::read_to_string(file_path).unwrap();
 
     let mut json: Value = serde_json::from_str(&json_string).unwrap();
     let mut money = json.get("money").unwrap().as_i64().unwrap();
+    let mut bp_xp = json.get("bp_xp").unwrap().as_i64().unwrap();
+    let mut bp_tier = json.get("bp_tier").unwrap().as_i64().unwrap();
     let mut current_problem = json.get("current_problem").unwrap().as_i64().unwrap();
 
     money += problem.money;
     current_problem += 1;
+    bp_xp += (problem.money as f64 / 1.5).round() as i64;
+
+    if bp_xp >= 250 {
+        bp_tier += 1;
+
+        let tier = checker::index_to_battlepass_tier(&save_file, bp_tier).unwrap();
+
+        // UNTESTED
+        if (tier.p && save_file.premium) || !tier.p {
+            money += tier.amount;
+        }
+
+        json["bp_tier"] = Value::from(bp_tier)
+    }
 
     json["current_problem"] = Value::from(current_problem);
     json["money"] = Value::from(money);
+    json["bp_xp"] = Value::from(bp_xp);
 
     let updated_json_string = serde_json::to_string_pretty(&json).unwrap();
 
     fs::write(file_path, updated_json_string).unwrap();
 }
 
+fn update_field(field: &str, value: bool) {
+    let file_path = "src/data/savedata.json";
+    let json_string = std::fs::read_to_string(file_path).unwrap();
+
+    let mut json: Value = serde_json::from_str(&json_string).unwrap();
+
+    json[field] = Value::from(value);
+
+    let updated_json_string = serde_json::to_string_pretty(&json).unwrap();
+
+    fs::write(file_path, updated_json_string).unwrap();
+}
 fn move_file(problem: Problem, file_path: &String) {
-    let _ = fs::copy(file_path, ".history/".to_owned() + file_path);
+    let _ = fs::copy(file_path, ".history/".to_owned() + &rand::thread_rng().gen_range(10..10000).to_string() + file_path);
+
     let _ = fs::write(
         file_path,
         format!("/** {} */\n{}", problem.description, problem.starting_code),
@@ -217,14 +282,33 @@ fn main() -> Result<()> {
     let args: Vec<String> = env::args().collect();
     let arg = args.get(1).unwrap_or_else(|| {
         println!(
-            "{}\n{}\n{}\n{}",
+            "{}\n\n{}{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}",
+            format!(
+                "┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃                   {}                      ┃
+┃      You've received a {} for {} off!        ┃
+┃                {}                  ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛", // fuck you VSCode
+                "ATTENTION!".red(),
+                "COUPON".cyan(),
+                (rand::thread_rng().gen_range(10..100).to_string() + "%").yellow(),
+                "[Click to reveal]".on_green().black()
+            ),
             "𐂃  Subterfuge\n".cyan(),
+            "Learning TypeScript the Temu way!\n".dark_cyan().italic(),
+            "This program's purpose is to restrict your TypeScript down to just console.log and functions. After completing \"problems\" (similar to LeetCode), you gain money. With money, you buy features. To complete the game, you need to solve all (10) problems. Commands are listed below for help.\n".dark_grey().italic(),
             "Commands:",
-            "  - filepath (ex. main.ts)",
-            "  - shop",
+            "  - [filepath]   (Runs the given file against current problem. Example: main.ts)",
+            "  - shop         (Displays the shop with the available features to purchase)",
+            "  - current      (Displays information about your current problem)",
+            "  - battlepass   (Displays the battlepass)",
+            "  - claim [code] (Claim a promo code for Premium. Example: claim AOPMGBAEP)",
+            "  - support [code] (Support a content creator that creates content on this game)",
+            "  - use [code] (Claim a COUPON code. Example: claim OKEGAOP)",
         );
         process::exit(1);
     });
+    let arg2 = args.get(2);
 
     if arg == "shop" {
         let feature = tui::display_shop(&save_file);
@@ -232,6 +316,24 @@ fn main() -> Result<()> {
         buy_feature(feature)
     } else if arg == "current" {
         tui::display_current_task(&save_file)
+    } else if arg == "battlepass" {
+        tui::display_battlepass(&save_file)
+    } else if arg == "claim" {
+        if arg2.unwrap_or_else(|| {
+            println!("Please provide the promo code.");
+            process::exit(1)
+        }) == "KJGQ77"
+        {
+            update_field("premium", true)
+        }
+    } else if arg == "use" {
+        // haha
+    } else if arg == "support" {
+        let arg = arg2.unwrap_or_else(|| {
+            println!("Please provide the content creator.");
+            process::exit(1)
+        }).clone().yellow();
+        println!("You are now supporting: {}.", arg)
     } else {
         run_checks(save_file, arg);
     }
