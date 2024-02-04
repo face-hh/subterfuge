@@ -52,9 +52,13 @@ While running your code, you have a 10% of being interrupted by a spinning wheel
 - Can I contribute?
   - The structure for adding problems is quite intuitive, so if you wish you can open a pull request with a new problem in `savedata.json`. Please also include the solution inside `tasks/`.
 
+# Known bugs
+1. The RegEx used to detect "regex" also matches comments like `/** */`.
+2. If a feature's RegEx returns more than 2 lines of snippet, the program panics.
 # Credits
 - https://temu.com
 - https://fortnite.com
+- https://leetcode.com & everyone who posted solutions
 - [Linker](https://github.com/Linker-123?tab=repositories) for the idea
 
-Created by Face :)
+Created with 🦀 by Face

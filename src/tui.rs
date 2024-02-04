@@ -156,10 +156,10 @@ pub fn display_battlepass(save_file: &SaveFile) {
         let p = format!("{bar} {} {bar}", _p.on_black().red());
 
         if modify_title {
-            reward += &format!("   ◄ {}/250 XP", save_file.bp_xp).blue().to_string()
+            reward += &format!("   ◄ {}/200 XP", save_file.bp_xp).blue().to_string()
         }
         if modify_title_completed {
-            reward += &"   ◄ 250/250 XP".dark_blue().to_string()
+            reward += &"   🮤 200/200 XP".dark_blue().to_string()
         }
 
         if index == "1" {
@@ -177,6 +177,32 @@ pub fn display_battlepass(save_file: &SaveFile) {
             print_cell(title, reward, p, tier.p);
             println!("{semiend}");
         }
+    }
+}
+
+pub fn peek(save_file: &SaveFile) {
+    println!("┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓");
+    
+    let bar = "┃";
+
+    let _intro = create_box(&"Problem set:", 35);
+
+    println!("{bar} {} {bar}", _intro.cyan());
+
+    println!("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
+
+    for problem in save_file.problems.iter() {
+        let mut additional = "".white();
+
+        if problem.index == save_file.current_problem {
+            additional = "🮤 You're here!".dark_grey()
+        }
+
+        println!("┣ {}. {} {}", problem.index, problem.name.clone().cyan(), additional);
+    }
+
+    if save_file.current_problem > save_file.problems.len() as i64 {
+        println!("┗ {}", "Congrats, you've completed the game! Was a blast having you on :D".yellow())
     }
 }
 

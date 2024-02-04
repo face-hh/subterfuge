@@ -134,12 +134,15 @@ fn run_checks(save_file: SaveFile, file_path: &String) {
             let start = res.unwrap().start();
             let end = res.unwrap().end();
             let snippet = &contents[start..end];
-
+            println!("{snippet}");
             let (line_number, line) = contents
                 .lines()
                 .enumerate()
                 .find(|(_, line)| line.contains(snippet))
-                .unwrap();
+                .unwrap_or_else(|| {
+                    println!("ERROR: could not parse snippet as it is >= 2 lines long. This is not an issue with your code.");
+                    process::exit(1)
+                });
 
             let err1 = format!(
                 "|- {}. {}",
@@ -233,9 +236,8 @@ fn problem_passed(save_file: &SaveFile, problem: &Problem) {
     current_problem += 1;
     bp_xp += (problem.money as f64 / 1.5).round() as i64;
 
-    if bp_xp >= 250 {
+    while bp_xp >= 200 && bp_tier != 31 {
         bp_tier += 1;
-
         let tier = checker::index_to_battlepass_tier(&save_file, bp_tier).unwrap();
 
         // UNTESTED
@@ -243,7 +245,8 @@ fn problem_passed(save_file: &SaveFile, problem: &Problem) {
             money += tier.amount;
         }
 
-        json["bp_tier"] = Value::from(bp_tier)
+        json["bp_tier"] = Value::from(bp_tier);
+        bp_xp -= 200
     }
 
     json["current_problem"] = Value::from(current_problem);
@@ -282,7 +285,7 @@ fn main() -> Result<()> {
     let args: Vec<String> = env::args().collect();
     let arg = args.get(1).unwrap_or_else(|| {
         println!(
-            "{}\n\n{}{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}",
+            "{}\n\n{}{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}",
             format!(
                 "┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
 ┃                   {}                      ┃
@@ -298,13 +301,14 @@ fn main() -> Result<()> {
             "Learning TypeScript the Temu way!\n".dark_cyan().italic(),
             "This program's purpose is to restrict your TypeScript down to just console.log and functions. After completing \"problems\" (similar to LeetCode), you gain money. With money, you buy features. To complete the game, you need to solve all (10) problems. Commands are listed below for help.\n".dark_grey().italic(),
             "Commands:",
-            "  - [filepath]   (Runs the given file against current problem. Example: main.ts)",
-            "  - shop         (Displays the shop with the available features to purchase)",
-            "  - current      (Displays information about your current problem)",
-            "  - battlepass   (Displays the battlepass)",
-            "  - claim [code] (Claim a promo code for Premium. Example: claim AOPMGBAEP)",
+            "  - [filepath]     (Runs the given file against current problem. Example: main.ts)",
+            "  - shop           (Displays the shop with the available features to purchase)",
+            "  - current        (Displays information about your current problem)",
+            "  - peek           (Displays the problem list & where you're at)",
+            "  - battlepass     (Displays the battlepass)",
+            "  - claim [code]   (Claim a promo code for Premium. Example: claim AOPMGBAEP)",
             "  - support [code] (Support a content creator that creates content on this game)",
-            "  - use [code] (Claim a COUPON code. Example: claim OKEGAOP)",
+            "  - use [code]     (Claim a COUPON code. Example: claim OKEGAOP)",
         );
         process::exit(1);
     });
@@ -328,6 +332,8 @@ fn main() -> Result<()> {
         }
     } else if arg == "use" {
         // haha
+    } else if arg == "peek" {
+        tui::peek(&save_file)
     } else if arg == "support" {
         let arg = arg2.unwrap_or_else(|| {
             println!("Please provide the content creator.");
