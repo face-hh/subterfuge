@@ -181,9 +181,9 @@
       "type": "money"
     }
   ],
-  "bp_tier": 12,
-  "bp_xp": 1732,
-  "current_problem": 5,
+  "bp_tier": 0,
+  "bp_xp": 0,
+  "current_problem": 1,
   "features": [
     {
       "cost": 20,
@@ -246,8 +246,8 @@
       "unlocked": false
     }
   ],
-  "money": 3496,
-  "premium": true,
+  "money": 0,
+  "premium": false,
   "problems": [
     {
       "append": "",
