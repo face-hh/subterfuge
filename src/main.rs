@@ -188,7 +188,7 @@ fn run_checks(save_file: SaveFile, file_path: &String) {
 
     println!(
         "{} (+{}$)",
-        "𐂃  You did it! Run \"sbf current\" to see your next challenge.".green(),
+        "𐂃  You did it! Run \"current\" to see your next challenge.".green(),
         money
     )
 }

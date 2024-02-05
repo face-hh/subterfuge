@@ -1,4 +1,4 @@
-use std::{fs, process::Command};
+use std::{fs::{self, create_dir_all}, process::Command};
 
 use crate::structs::{BattlepassTier, Problem, SaveFile};
 
@@ -32,8 +32,15 @@ pub fn check(mut contents: String, current_problem: &Problem) -> bool {
 
     contents.push_str(&format!("\n\n\n{}\n\n\n{}", help_funcs, current_problem.append));
 
-    let _ = fs::write(file_path, contents);
+    let file = fs::write(file_path, contents);
 
+    match file {
+        Err(err) => {
+            create_dir_all(".dump")
+        }
+        Ok(_) => {},
+    }
+    
     let output = Command::new("bun")
         .args([file_path])
         .output()
