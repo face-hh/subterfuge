@@ -271,7 +271,7 @@ fn update_field(field: &str, value: bool) {
     fs::write(file_path, updated_json_string).unwrap();
 }
 fn move_file(problem: Problem, file_path: &String) {
-    let _ = fs::copy(file_path, ".history/".to_owned() + &rand::thread_rng().gen_range(10..10000).to_string() + file_path);
+    let _ = fs::copy(file_path, "history/".to_owned() + &rand::thread_rng().gen_range(10..10000).to_string() + file_path);
 
     let _ = fs::write(
         file_path,

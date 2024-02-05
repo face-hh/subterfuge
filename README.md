@@ -54,7 +54,7 @@ While running your code, you have a 10% of being interrupted by a spinning wheel
 - Dude I'm stuck at...
   - The `tasks/` folder contains the solutions for each problem. Please peek at it only if you REALLY can't figure out the answers.
 - Why did my `main.ts` get deleted??
-  - Once your solution passes, it is moved to `.history/{0..100000}main.ts`. The active file however get's rewritten with the boilerplate for the next problem.
+  - Once your solution passes, it is moved to `history/{0..100000}main.ts`. The active file however get's rewritten with the boilerplate for the next problem.
 - How do I get money?
   - The prices are designed to revolve around giving you exactly how much you need for the feature required in the next problem, and so on. If you've spent money on a feature you don't need, you can go in `/src/data/savedata.json` and modify the "money" property. It isn't recommended as it may alter your gaming experience. Otherwise, you can get money from *problems* and *battlepass*.
 - How is the BP XP calculated?

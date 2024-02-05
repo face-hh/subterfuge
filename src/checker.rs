@@ -19,7 +19,7 @@ pub fn index_to_battlepass_tier(save_file: &SaveFile, index: i64) -> Option<Batt
 }
 
 pub fn check(mut contents: String, current_problem: &Problem) -> bool {
-    let file_path = ".dump/mutated.ts";
+    let file_path = "dump/mutated.ts";
     let help_funcs = r"/** INJECTED BY SUBTERFUGE */
     
     function __arraysEqual(arr1, arr2) {
@@ -36,7 +36,7 @@ pub fn check(mut contents: String, current_problem: &Problem) -> bool {
 
     match file {
         Err(err) => {
-            create_dir_all(".dump")
+            create_dir_all("dump")
         }
         Ok(_) => {},
     }
