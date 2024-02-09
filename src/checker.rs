@@ -36,7 +36,7 @@ pub fn check(mut contents: String, current_problem: &Problem) -> bool {
 
     match file {
         Err(err) => {
-            create_dir_all("dump")
+            create_dir_all("dump");
         }
         Ok(_) => {},
     }
