@@ -20,7 +20,7 @@ Commands:
 ```
 
 # How to run?
-‼️ Please install https://bun.sh first! (JS/TS runtime)
+‼️ Please install [Bun](https://bun.sh/docs/installation) first! (JS/TS runtime)
 
 1. Install Rust: https://www.rust-lang.org/tools/install
 2. Run `cargo run` in this folder.
