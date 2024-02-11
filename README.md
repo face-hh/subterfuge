@@ -9,13 +9,14 @@ This program's purpose is to restrict your TypeScript down to just console.log a
 # Commands
 ```
 Commands:
-  - [filepath]   (Runs the given file against current problem. Example: main.ts)
-  - shop         (Displays the shop with the available features to purchase)
-  - current      (Displays information about your current problem)
-  - battlepass   (Displays the battlepass)
-  - claim [code] (Claim a promo code for Premium. Example: claim AOPMGBAEP)
+  - [filepath]     (Runs the given file against current problem. Example: main.ts)
+  - shop           (Displays the shop with the available features to purchase)
+  - current        (Displays information about your current problem)
+  - peek           (Displays the problem list & where you're at)
+  - battlepass     (Displays the battlepass)
+  - claim [code]   (Claim a promo code for Premium. Example: claim AOPMGBAEP)
   - support [code] (Support a content creator that creates content on this game)
-  - use [code] (Claim a COUPON code. Example: claim OKEGAOP)
+  - use [code]     (Claim a COUPON code. Example: claim OKEGAOP)
 ```
 
 # How to run?
