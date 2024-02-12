@@ -69,8 +69,10 @@ While running your code, you have a 10% of being interrupted by a spinning wheel
 
 # Known bugs
 1. The RegEx used to detect "regex" also matches comments like `/** */`.
-2. If a feature's RegEx returns more than 2 lines of snippet, the program panics.
+1. Every RegEx still works in comments (i.e. `// { this is: true }`).
+
 # Credits
+- [@mrbearworld](https://github.com/mybearworld) for completing the game **without buying anything**! Code [here](https://github.com/face-hh/subterfuge/issues/4)
 - https://temu.com
 - https://fortnite.com
 - https://leetcode.com & everyone who posted solutions
