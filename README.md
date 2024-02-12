@@ -52,6 +52,10 @@ While running your code, you have a 10% of being interrupted by a spinning wheel
 
 ![wheel](https://github.com/face-hh/subterfuge/assets/69168154/cbd5ae71-11fa-4f6b-b7e9-6763e29e1c7b)
 
+# Playthroughs
+## Complete without buying!
+1. [@mrbearworld](https://github.com/mybearworld)! Code [here](https://github.com/face-hh/subterfuge/issues/4)
+
 
 # FAQ
 - Dude I'm stuck at...
@@ -70,9 +74,8 @@ While running your code, you have a 10% of being interrupted by a spinning wheel
 # Known bugs
 1. The RegEx used to detect "regex" also matches comments like `/** */`.
 1. Every RegEx still works in comments (i.e. `// { this is: true }`).
-
+   
 # Credits
-- [@mrbearworld](https://github.com/mybearworld) for completing the game **without buying anything**! Code [here](https://github.com/face-hh/subterfuge/issues/4)
 - https://temu.com
 - https://fortnite.com
 - https://leetcode.com & everyone who posted solutions
