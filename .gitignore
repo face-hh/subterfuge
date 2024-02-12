@@ -1,2 +1,4 @@
 /target
 src/data/savedata.json
+history/*
+dump/*

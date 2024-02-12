@@ -189,7 +189,7 @@
       "cost": 20,
       "item": "Array",
       "regex": "(\\bArray\\b|\\[\\s*(?!\\])|[^\\S\\n]\\]|\\[]|\\.split|\\.sort)",
-      "unlocked": true
+      "unlocked": false
     },
     {
       "cost": 100,
@@ -268,12 +268,12 @@
       "starting_code": "function argumentsLength(...args) {\n  \n}"
     },
     {
-      "append": "console.log(isEmpty({}) === true && isEmpty({ 'ok': true }) === false && isEmpty({ null: null, undefined: undefined }) === false ? '__PASS55__' : '' );",
-      "description": "Given an object or an array, return if it is empty.",
+      "append": "console.log(someBool ? '__PASS55__' : '' );",
+      "description": "description moment",
       "index": 4,
       "money": 150,
-      "name": "Is Object Empty",
-      "starting_code": "function isEmpty(obj) {\n  \n}"
+      "name": "some name",
+      "starting_code": "function someName(str) {\n  \n}"
     },
     {
       "append": "console.log(romanToInt('CMXCIX') === 999 && romanToInt('DCCCLXVI') === 866 && romanToInt('XLVI') === 46 && romanToInt('CCCLVII') === 357 ? '__PASS55__' : '' );",
