@@ -189,30 +189,30 @@
       "cost": 20,
       "item": "Array",
       "regex": "(\\bArray\\b|\\[\\s*(?!\\])|[^\\S\\n]\\]|\\[]|\\.split|\\.sort)",
-      "unlocked": false
+      "unlocked": true
     },
     {
       "cost": 100,
       "item": "Object",
-      "regex": "\\{(\\s*[\"']?\\w+[\"']?\\s*:\\s*\\w+\\s*,)*\\s*[\"']?\\w+[\"']?\\s*:\\s*\\w+\\s*\\}|Object",
+      "regex": "\\{(?!\\s*\\}).*?\\}|(^|[^a-zA-Z])\\s*Object",
       "unlocked": false
     },
     {
       "cost": 150,
       "item": "IfStatement",
-      "regex": "(if)",
+      "regex": "(^|[^a-zA-Z])\\s*if",
       "unlocked": false
     },
     {
       "cost": 200,
       "item": "MutableVar",
-      "regex": "(let)",
+      "regex": "(^|[^a-zA-Z])\\s*(let|var)",
       "unlocked": false
     },
     {
       "cost": 250,
       "item": "ElseStatement",
-      "regex": "(else)",
+      "regex": "(^|[^a-zA-Z])\\s*else",
       "unlocked": false
     },
     {
@@ -230,19 +230,13 @@
     {
       "cost": 500,
       "item": "Ternaries",
-      "regex": "([\\w\\.\\(\\)\\+\\s]+)\\s*\\?\\s*([^:]+)\\s*:\\s*([^;]+)",
-      "unlocked": false
-    },
-    {
-      "cost": 750,
-      "item": "Types",
-      "regex": "(\b(?:\\([^)]+\\)|[^:\n]+)\\s*:\\s)",
+      "regex": "\\w+\\s*\\?\\s*\\w+\\s*:\\s*\\w+",
       "unlocked": false
     },
     {
       "cost": 5000,
       "item": "Packages",
-      "regex": "(import|require)",
+      "regex": "(^|[^a-zA-Z])\\s*(import|require)",
       "unlocked": false
     }
   ],
