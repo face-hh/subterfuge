@@ -129,15 +129,12 @@ fn run_checks(save_file: SaveFile, file_path: &String) {
             .find(&contents)
             .expect("Failed to perform find on content.");
         let is_matched = res.is_some();
-        println!("{contents}");
-        println!("{re}");
 
         if is_matched {
             let start = res.unwrap().start();
             let end = res.unwrap().end();
             let snippet = &contents[start..end];
 
-            println!("{snippet}");
             let (line_number, line) = contents
                 .lines()
                 .enumerate()

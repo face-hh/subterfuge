@@ -29,7 +29,7 @@ pub fn check(mut contents: String, current_problem: &Problem) -> bool {
         return JSON.stringify(obj1) === JSON.stringify(obj2)
     }
     ";
-    //                                                          ...... here ......
+
     contents.push_str(&format!("\n\n\n{}\n\n\n{}", help_funcs, current_problem.append));
 
     let file = fs::write(file_path, contents);
