@@ -31,6 +31,7 @@ pub struct Problem {
 
 #[derive(Debug, Clone)]
 pub struct BattlepassTier {
+    // why is this a string bruh
     pub(crate) index: String,
     pub(crate) _type: String,
     pub(crate) amount: i64,

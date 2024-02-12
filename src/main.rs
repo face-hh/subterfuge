@@ -129,19 +129,21 @@ fn run_checks(save_file: SaveFile, file_path: &String) {
             .find(&contents)
             .expect("Failed to perform find on content.");
         let is_matched = res.is_some();
+        println!("{contents}");
+        println!("{re}");
 
         if is_matched {
             let start = res.unwrap().start();
             let end = res.unwrap().end();
             let snippet = &contents[start..end];
+
             println!("{snippet}");
             let (line_number, line) = contents
                 .lines()
                 .enumerate()
                 .find(|(_, line)| line.contains(snippet))
                 .unwrap_or_else(|| {
-                    println!("ERROR: could not parse snippet as it is >= 2 lines long. This is not an issue with your code.");
-                    process::exit(1)
+                    (0, "Could not retrieve snippet due to new lines.")
                 });
 
             let err1 = format!(
@@ -238,16 +240,18 @@ fn problem_passed(save_file: &SaveFile, problem: &Problem) {
 
     while bp_xp >= 200 && bp_tier != 31 {
         bp_tier += 1;
-        let tier = checker::index_to_battlepass_tier(&save_file, bp_tier).unwrap();
-
-        // UNTESTED
-        if (tier.p && save_file.premium) || !tier.p {
-            money += tier.amount;
+        if let Some(tier) = checker::index_to_battlepass_tier(&save_file, bp_tier) {
+            // UNTESTED
+            if (tier.p && save_file.premium) || !tier.p {
+                money += tier.amount;
+            }
+    
+            json["bp_tier"] = Value::from(bp_tier);
+            bp_xp -= 200;
+        } else {
+            continue;
         }
-
-        json["bp_tier"] = Value::from(bp_tier);
-        bp_xp -= 200
-    }
+    }    
 
     json["current_problem"] = Value::from(current_problem);
     json["money"] = Value::from(money);
@@ -335,12 +339,13 @@ fn main() -> Result<()> {
     } else if arg == "peek" {
         tui::peek(&save_file)
     } else if arg == "support" {
-        let arg = arg2.unwrap_or_else(|| {
-            println!("Please provide the content creator.");
-            process::exit(1)
-        }).clone().yellow();
-        println!("You are now supporting: {}.", arg)
-    } else {
+    let arg = arg2.unwrap_or_else(|| {
+        println!("Please provide the content creator.");
+        process::exit(1)
+    }).clone().yellow();
+    
+    println!("You are now supporting: {}.", arg)
+} else {
         run_checks(save_file, arg);
     }
 
