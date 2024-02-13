@@ -9,16 +9,19 @@ This program's purpose is to restrict your TypeScript down to just console.log a
 # Commands
 ```
 Commands:
-  - [filepath]   (Runs the given file against current problem. Example: main.ts)
-  - shop         (Displays the shop with the available features to purchase)
-  - current      (Displays information about your current problem)
-  - battlepass   (Displays the battlepass)
-  - claim [code] (Claim a promo code for Premium. Example: claim AOPMGBAEP)
+  - [filepath]     (Runs the given file against current problem. Example: main.ts)
+  - shop           (Displays the shop with the available features to purchase)
+  - current        (Displays information about your current problem)
+  - peek           (Displays the problem list & where you're at)
+  - battlepass     (Displays the battlepass)
+  - claim [code]   (Claim a promo code for Premium. Example: claim AOPMGBAEP)
   - support [code] (Support a content creator that creates content on this game)
-  - use [code] (Claim a COUPON code. Example: claim OKEGAOP)
+  - use [code]     (Claim a COUPON code. Example: claim OKEGAOP)
 ```
 
 # How to run?
+‼️ Please install [Bun](https://bun.sh/docs/installation) first! (JS/TS runtime)
+
 1. Install Rust: https://www.rust-lang.org/tools/install
 2. Run `cargo run` in this folder.
 3. Create a `main.ts` in this folder.
@@ -49,6 +52,10 @@ While running your code, you have a 10% of being interrupted by a spinning wheel
 
 ![wheel](https://github.com/face-hh/subterfuge/assets/69168154/cbd5ae71-11fa-4f6b-b7e9-6763e29e1c7b)
 
+# Playthroughs
+## Complete without buying!
+1. [@mrbearworld](https://github.com/mybearworld)! Code [here](https://github.com/face-hh/subterfuge/issues/4)
+2. [@idkhow2type](https://github.com/idkhow2type)! Code [here](https://github.com/face-hh/subterfuge/issues/6)
 
 # FAQ
 - Dude I'm stuck at...
@@ -66,7 +73,8 @@ While running your code, you have a 10% of being interrupted by a spinning wheel
 
 # Known bugs
 1. The RegEx used to detect "regex" also matches comments like `/** */`.
-2. If a feature's RegEx returns more than 2 lines of snippet, the program panics.
+1. Every RegEx still works in comments (i.e. `// { this is: true }`).
+   
 # Credits
 - https://temu.com
 - https://fortnite.com

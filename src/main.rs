@@ -137,7 +137,6 @@ fn run_checks(save_file: SaveFile, file_path: &String) {
             let end = res.unwrap().end();
             let snippet = &contents[start..end];
 
-            println!("{snippet}");
             let (line_number, line) = contents
                 .lines()
                 .enumerate()

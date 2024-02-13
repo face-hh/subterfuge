@@ -49,7 +49,7 @@ pub fn check(mut contents: String, current_problem: &Problem) -> bool {
     let res = String::from_utf8_lossy(&output.stdout).to_string();
 
     if current_problem.name == "Hello World" {
-        res.contains("Hello, World!")
+        res.contains("Hello, World!") || res.to_lowercase().contains("Hello World")
     } else {
         if res.contains("__PASS55__") {
             return true;
