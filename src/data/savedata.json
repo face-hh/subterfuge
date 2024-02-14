@@ -189,7 +189,7 @@
       "cost": 20,
       "item": "Array",
       "regex": "(\\bArray\\b|\\[\\s*(?!\\])|[^\\S\\n]\\]|\\[]|\\.split|\\.sort)",
-      "unlocked": true
+      "unlocked": false
     },
     {
       "cost": 100,

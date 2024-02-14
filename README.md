@@ -56,7 +56,7 @@ While running your code, you have a 10% of being interrupted by a spinning wheel
 ## Complete without buying!
 1. [@mybearworld](https://github.com/mybearworld)! Code [here](https://github.com/face-hh/subterfuge/issues/4)
 2. [@idkhow2type](https://github.com/idkhow2type)! Code [here](https://github.com/face-hh/subterfuge/issues/6)
-
+3. [@BlockOG](https://github.com/BlockOG)! Code [here](https://github.com/face-hh/subterfuge/issues/9)
 # FAQ
 - Dude I'm stuck at...
   - The `tasks/` folder contains the solutions for each problem. Please peek at it only if you REALLY can't figure out the answers.
