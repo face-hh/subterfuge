@@ -129,8 +129,6 @@ fn run_checks(save_file: SaveFile, file_path: &String) {
             .find(&contents)
             .expect("Failed to perform find on content.");
         let is_matched = res.is_some();
-        println!("{contents}");
-        println!("{re}");
 
         if is_matched {
             let start = res.unwrap().start();
