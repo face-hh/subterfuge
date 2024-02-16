@@ -35,8 +35,11 @@ pub fn check(mut contents: String, current_problem: &Problem) -> bool {
     let file = fs::write(file_path, contents);
 
     match file {
-        Err(err) => {
-            create_dir_all("dump");
+        Err(_err) => {
+            let dump_err = create_dir_all("dump");
+            if dump_err.is_err() {
+                println!("An error occurred while writing the file, and another error occurred while creating the dump directory. Please check your permissions and try again.");
+            }
         }
         Ok(_) => {},
     }
