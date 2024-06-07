@@ -1,4 +1,8 @@
-# 𐂃 Subterfuge
+<div align="center">
+  <img width=320  src="/assets/Subterfuge.png">
+<h1>Subterfuge</h1>  
+</div>
+
 Learning TypeScript the Temu way!
 
 # What's this?
