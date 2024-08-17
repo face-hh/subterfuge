@@ -18,6 +18,17 @@ pub fn index_to_battlepass_tier(save_file: &SaveFile, index: i64) -> Option<Batt
         .cloned()
 }
 
+// This fixes the issue of rust not finding bun on windows
+// based on https://stackoverflow.com/a/78242393
+pub fn get_bun_command() -> Command {
+    #[cfg(windows)]
+    const BUN: &str = "bun.cmd";
+    #[cfg(not(windows))]
+    const BUN: &str = "bun";
+
+    Command::new(BUN)
+}
+
 pub fn check(mut contents: String, current_problem: &Problem) -> bool {
     let file_path = "dump/mutated.ts";
     let help_funcs = r"/** INJECTED BY SUBTERFUGE */
@@ -44,7 +55,7 @@ pub fn check(mut contents: String, current_problem: &Problem) -> bool {
         Ok(_) => {},
     }
     
-    let output = Command::new("bun")
+    let output = get_bun_command()
         .args([file_path])
         .output()
         .expect("failed to execute process");
